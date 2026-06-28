@@ -14,6 +14,7 @@ import {
 
 const items = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "AI Sales Manager", href: "/ai-sales-manager", icon: LayoutDashboard },
   { name: "Leads", href: "/leads", icon: Users },
   { name: "Properties", href: "/properties", icon: Building2 },
   { name: "Site Visits", href: "/site-visits", icon: CalendarDays },

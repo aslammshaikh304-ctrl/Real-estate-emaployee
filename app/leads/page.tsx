@@ -13,9 +13,7 @@ export default async function LeadsPage() {
       <h1 className="text-3xl font-bold mb-6">
         Leads
       </h1>
-
       <AddLeadForm />
-
       <div className="grid gap-4 mt-6">
         {leads?.map((lead) => (
           <div

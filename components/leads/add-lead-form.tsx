@@ -10,13 +10,16 @@ export default function AddLeadForm() {
   const [budget, setBudget] = useState("");
   const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (
-    e: React.FormEvent
+    e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
-    const { error } = await supabase
+    setLoading(true);
+
+    const { data: lead, error } = await supabase
       .from("leads")
       .insert([
         {
@@ -27,12 +30,30 @@ export default function AddLeadForm() {
           location,
           message,
         },
-      ]);
+      ])
+      .select()
+      .single();
 
     if (error) {
-      console.log(error);
+      console.error(error);
       alert("Error adding lead");
+      setLoading(false);
       return;
+    }
+
+    try {
+      await fetch("/api/welcome-automation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          leadId: lead.id,
+          event: "new_lead",
+        }),
+      });
+    } catch (err) {
+      console.error("Welcome automation failed", err);
     }
 
     alert("Lead Added Successfully");
@@ -44,15 +65,17 @@ export default function AddLeadForm() {
     setLocation("");
     setMessage("");
 
+    setLoading(false);
+
     window.location.reload();
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 border rounded-lg p-4"
+      className="space-y-4 border rounded-xl p-6 bg-white shadow-sm"
     >
-      <h2 className="text-xl font-semibold">
+      <h2 className="text-xl font-bold">
         Add Lead
       </h2>
 
@@ -60,10 +83,8 @@ export default function AddLeadForm() {
         type="text"
         placeholder="Name"
         value={name}
-        onChange={(e) =>
-          setName(e.target.value)
-        }
-        className="w-full border p-2 rounded"
+        onChange={(e) => setName(e.target.value)}
+        className="w-full border rounded-lg p-3"
         required
       />
 
@@ -71,10 +92,8 @@ export default function AddLeadForm() {
         type="email"
         placeholder="Email"
         value={email}
-        onChange={(e) =>
-          setEmail(e.target.value)
-        }
-        className="w-full border p-2 rounded"
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full border rounded-lg p-3"
         required
       />
 
@@ -82,10 +101,8 @@ export default function AddLeadForm() {
         type="text"
         placeholder="Phone"
         value={phone}
-        onChange={(e) =>
-          setPhone(e.target.value)
-        }
-        className="w-full border p-2 rounded"
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full border rounded-lg p-3"
         required
       />
 
@@ -93,10 +110,8 @@ export default function AddLeadForm() {
         type="text"
         placeholder="Budget"
         value={budget}
-        onChange={(e) =>
-          setBudget(e.target.value)
-        }
-        className="w-full border p-2 rounded"
+        onChange={(e) => setBudget(e.target.value)}
+        className="w-full border rounded-lg p-3"
         required
       />
 
@@ -104,28 +119,25 @@ export default function AddLeadForm() {
         type="text"
         placeholder="Location"
         value={location}
-        onChange={(e) =>
-          setLocation(e.target.value)
-        }
-        className="w-full border p-2 rounded"
+        onChange={(e) => setLocation(e.target.value)}
+        className="w-full border rounded-lg p-3"
         required
       />
 
       <textarea
         placeholder="Requirements / Message"
+        rows={5}
         value={message}
-        onChange={(e) =>
-          setMessage(e.target.value)
-        }
-        rows={4}
-        className="w-full border p-2 rounded"
+        onChange={(e) => setMessage(e.target.value)}
+        className="w-full border rounded-lg p-3"
       />
 
       <button
         type="submit"
-        className="bg-black text-white px-4 py-2 rounded"
+        disabled={loading}
+        className="bg-black text-white px-6 py-3 rounded-lg disabled:opacity-50"
       >
-        Save Lead
+        {loading ? "Saving..." : "Save Lead"}
       </button>
     </form>
   );

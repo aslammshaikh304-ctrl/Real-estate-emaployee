@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import StageActions from "@/components/leads/stage-actions";
+import AIFollowup from "@/components/leads/ai-followup";
 
 export default async function LeadDetails({
   params,
@@ -133,7 +134,7 @@ export default async function LeadDetails({
 
         </div>
       </div>
-
+    <AIFollowup lead={lead} />
       {/* Recommended Properties */}
 
       <div className="border rounded-xl p-6 bg-white shadow-sm">

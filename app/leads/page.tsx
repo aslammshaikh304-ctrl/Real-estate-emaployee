@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AddLeadForm from "@/components/leads/add-lead-form";
 import { supabase } from "@/lib/supabase";
+import LeadExport from "@/components/export/LeadExport";
 
 export default async function LeadsPage() {
   const { data: leads } = await supabase
@@ -10,10 +11,26 @@ export default async function LeadsPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">
+
+  <div className="mb-6 flex items-center justify-between">
+
+    <div>
+
+      <h1 className="text-3xl font-bold">
         Leads
       </h1>
-      <AddLeadForm />
+
+      <p className="text-gray-500 mt-1">
+        Manage and track all incoming leads.
+      </p>
+
+    </div>
+
+  <LeadExport leads={leads || []} />
+
+  </div>
+
+  <AddLeadForm />
       <div className="grid gap-4 mt-6">
         {leads?.map((lead) => (
           <div

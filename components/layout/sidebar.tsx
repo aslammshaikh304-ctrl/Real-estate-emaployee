@@ -10,7 +10,9 @@ import {
   CheckSquare,
   BarChart3,
   Settings,
+  Calendar,
 } from "lucide-react";
+import AnalyticsPage from "@/app/analytics/page";
 
 const items = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -21,6 +23,7 @@ const items = [
   { name: "Follow Ups", href: "/followups", icon: CheckSquare },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Pipeline", href: "/pipeline", icon: BarChart3 },
+  { name: "Calendar", href: "/calendar", icon: Calendar },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
